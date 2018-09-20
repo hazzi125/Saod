@@ -7,6 +7,7 @@ using namespace std;
 // сортировка по дате родения, ключ поиска - год рождения
 int N = 5;
 
+
 struct Man {
 	char name[30];
 	short int num;
