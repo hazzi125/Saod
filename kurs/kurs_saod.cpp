@@ -5,7 +5,7 @@
 using namespace std;
 
 // сортировка по дате родения, ключ поиска - год рождения
-int N = 5;
+const int N = 20;
 
 
 struct Man {
@@ -13,17 +13,17 @@ struct Man {
 	short int num;
 	char position[22];
 	char date[10];
-} Company[5];
+} Company[N];
 
 int main() {
 	//setlocale(LC_ALL, "rus");
 	FILE *f;
 	f = fopen("testBase2.dat", "r");
-	fread(&Company, sizeof(Company), N, f);
+	fread(&Company, sizeof(Company), 1, f);
 	cout << "   |   Name/Surname/Patronymic    | Num |       Position        | Tel. number\n";
 	cout << "---|------------------------------|-----|-----------------------|-------------\n";
-	for(int i = 1; i <= N; i++) {
-		printf("%2d.| ", i);
+	for(int i = 0; i < N; i++) {
+		printf("%2d.| ", i+1);
 		cout << Company[i].name << "| ";
 		printf("%3d", Company[i].num);
 		cout << " | " << Company[i].position << " |   " << Company[i].date << "\n";
