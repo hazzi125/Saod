@@ -25,7 +25,36 @@ void swap(Man *&a, Man *&b) {
 	*b = temp;
 }
 
-void HeapSort(Man **Com, int n) {
+void Man::Init(Man *a, int n) {
+    FILE *f;
+    f = fopen("testBase2.dat", "rb");
+    fread(a, sizeof(*a), n, f);
+    fclose(f);
+}
+
+void Man::PrintBase(Man *a, int n) {
+    cout << "   |   Name/Surname/Patronymic    | Num |       Position        |    Date\n";
+	cout << "---|------------------------------|-----|-----------------------|-------------\n";
+	bool flag;
+	int k = 0;
+	while(k < n) {
+		for(int i = 0; i < 20; i++) {
+			printf("%2d.| ", k+1);
+			cout << a[k].name << "| ";
+			printf("%3d", a[k].num);
+			cout << " | " << a[k].position << " |   " << a[k].date << "\n";
+			k++;
+	    }
+	    cout << "\nDo you want to print 20 more records? 1/0 ";
+		cin >> flag;
+		cout << "\n";
+		if(flag == 0) {
+			break;
+		}
+	}
+}
+
+void Man::HeapSort(Man **Com, int n) {
 	int i, j;
 	Man x, temp;
 	int L = n/2;
