@@ -2,13 +2,6 @@
 #define HEAD_H_
 #include <iostream>
 #include <cstdio>
-/*
-struct Man {
-	char name[30];
-	short int num;
-	char position[22];
-	char date[10];
-};*/
 
 class Man {
 private:
@@ -21,6 +14,8 @@ public:
     void Init(Man *a, int n);
     
     void PrintBase(Man *a, int n);
+    
+    int Compare(Man *a, Man *b);
     
     void HeapSort(Man **Com, int n);
 };

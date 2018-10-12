@@ -54,6 +54,18 @@ void Man::PrintBase(Man *a, int n) {
 	}
 }
 
+int Man::Compare(Man *a, Man *b) {
+	char ch1[3], ch2[3];
+	ch1[0] = a->date[6];
+	ch1[1] = a->date[7];
+	
+	ch2[0] = b->date[6];
+	ch2[1] = b->date[7];
+
+	int temp = strcmp(ch1, ch2);
+	return temp;
+}
+
 void Man::HeapSort(Man **Com, int n) {
 	int i, j;
 	Man x, temp;
