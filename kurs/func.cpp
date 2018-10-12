@@ -56,14 +56,41 @@ void Man::PrintBase(Man *a, int n) {
 
 int Man::Compare(Man *a, Man *b) {
 	char ch1[3], ch2[3];
+	int temp;;
 	ch1[0] = a->date[6];
 	ch1[1] = a->date[7];
 	
 	ch2[0] = b->date[6];
 	ch2[1] = b->date[7];
-
-	int temp = strcmp(ch1, ch2);
-	return temp;
+ 
+	temp = strcmp(ch1, ch2);
+	
+	if(temp != 0)
+	    return temp;
+	
+	else {
+		ch1[0] = a->date[3];
+	    ch1[1] = a->date[4];
+	
+	    ch2[0] = b->date[3];
+	    ch2[1] = b->date[4];
+	    
+	    temp = strcmp(ch1, ch2);
+	    if(temp != 0)
+	        return temp;
+	    
+	    else {
+	    	ch1[0] = a->date[0];
+	        ch1[1] = a->date[1];
+	
+	        ch2[0] = b->date[0];
+	        ch2[1] = b->date[1];
+	         
+	        temp = strcmp(ch1, ch2);
+	        return temp;
+		}
+	    
+	}
 }
 
 void Man::HeapSort(Man **Com, int n) {
@@ -77,14 +104,10 @@ void Man::HeapSort(Man **Com, int n) {
 			j = 2*i;
 			if(j > n)
 				break;
-			if((j < n-1) && (strcmp(Com[j]->date, Com[j-1]->date) <= 0))
+			if((j < n-1) && (Compare(Com[j], Com[j-1]) >= 0))
 				j++;
-			if(strcmp(x.date, Com[j-1]->date) < 0)
-				break;
-			if(strcmp(x.date, Com[j-1]->date) == 0)
-			    //if(strcmp(x.name, Com[j-1]->name) >= 0)
-			        break;
-			        
+			if(Compare(&x, Com[j-1]) >= 0)
+				break;     
 			swap(Com[i-1], Com[j-1]);		
 			i = j;
 		}
@@ -101,13 +124,10 @@ void Man::HeapSort(Man **Com, int n) {
 			j = 2*i;
 			if(j > R)
 				break;
-			if((j < R) && (strcmp(Com[j]->date, Com[j-1]->date) <= 0))
+			if((j < R) && (Compare(Com[j], Com[j-1]) >= 0))
 				j++;
-			if(strcmp(x.date, Com[j-1]->date) < 0)
+			if(Compare(&x, Com[j-1]) > 0)
 				break;
-			if(strcmp(x.date, Com[j-1]->date) == 0)
-			    //if(strcmp(x.name, Com[j-1]->name) >= 0)
-			        break;
 			        
 			swap(Com[i-1], Com[j-1]);
 			i = j;
