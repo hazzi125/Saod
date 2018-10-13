@@ -15,9 +15,13 @@ public:
     
     void PrintBase(Man *a, int n);
     
+    void PrintRec(Man *a, int i);
+    
     int Compare(Man *a, Man *b);
     
     void HeapSort(Man **Com, int n);
+    
+    int BinSearch(Man *Com, int n, char str);
 };
 
 void FillRand(int A[], int n);

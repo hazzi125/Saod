@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 	//setlocale(LC_ALL, "rus");
-	int N = 4000;
+	int N = 20;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
 	
@@ -22,6 +22,11 @@ int main() {
     Company->HeapSort(B, N);
     Company->PrintBase(Company, N);
 
+	cout << "\n";
+	char str;
+	cin >> str;
+	int i = Company->BinSearch(Company, N, str);
+	Company->PrintRec(Company, i);
 	cout << "\n";
 	system("pause");
 	return 0;

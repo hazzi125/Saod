@@ -54,6 +54,13 @@ void Man::PrintBase(Man *a, int n) {
 	}
 }
 
+void Man::PrintRec(Man *a, int i) {
+	printf("%2d.| ", i+1);
+	cout << a[i].name << "| ";
+	printf("%3d", a[i].num);
+	cout << " | " << a[i].position << " |   " << a[i].date << "\n";
+}
+
 int Man::Compare(Man *a, Man *b) {
 	int temp;
  
@@ -96,44 +103,21 @@ int Man::Compare(Man *a, Man *b) {
     return temp;
 }
 
-/*int Man::Compare(Man *a, Man *b) {
-	char ch1[3], ch2[3];
-	int temp;;
-	ch1[0] = a->date[6];
-	ch1[1] = a->date[7];
-	
-	ch2[0] = b->date[6];
-	ch2[1] = b->date[7];
- 
-	temp = strcmp(ch1, ch2);
-	
-	if(temp != 0)
-	    return temp;
-	
-	else {
-		ch1[0] = a->date[3];
-	    ch1[1] = a->date[4];
-	
-	    ch2[0] = b->date[3];
-	    ch2[1] = b->date[4];
-	    
-	    temp = strcmp(ch1, ch2);
-	    if(temp != 0)
-	        return temp;
-	    
-	    else {
-	    	ch1[0] = a->date[0];
-	        ch1[1] = a->date[1];
-	
-	        ch2[0] = b->date[0];
-	        ch2[1] = b->date[1];
-	         
-	        temp = strcmp(ch1, ch2);
-	        return temp;
-		}
-	    
+int Man::BinSearch(Man *Com, int n, char str) {
+	int L = 1, R = n, m;
+	bool find;
+	while(L < R) {
+		m = (L + R) / 2;
+		if(Com[m-1].date[6] < str)
+		    L = m + 1;
+		else
+		    R = m;   
 	}
-}*/
+    if(Com[R-1].date[6] == str)
+	    return R-1;
+	else
+	    cout << "Not found";
+}
 
 void Man::HeapSort(Man **Com, int n) {
 	int i, j;
