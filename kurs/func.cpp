@@ -55,6 +55,48 @@ void Man::PrintBase(Man *a, int n) {
 }
 
 int Man::Compare(Man *a, Man *b) {
+	int temp;
+ 
+	if(a->date[6] > b->date[6])
+	    temp = 1;
+	else if(a->date[6] < b->date[6])
+	    temp = -1;
+	else {
+		if(a->date[7] > b->date[7])
+	        temp = 1;
+	    else if(a->date[7] < b->date[7])
+	        temp = -1;
+	    else {
+	    	if(a->date[3] > b->date[3])
+	            temp = 1;
+	        else if(a->date[3] < b->date[3])
+	            temp = -1;
+	        else {
+	        	if(a->date[4] > b->date[4])
+	                temp = 1;
+	            else if(a->date[4] < b->date[4])
+	                temp = -1;
+	            else {
+	            	if(a->date[0] > b->date[0])
+	                    temp = 1;
+	                else if(a->date[0] < b->date[0])
+	                    temp = -1;
+	                else {
+	                	if(a->date[1] > b->date[1])
+	            			temp = 1;
+	        		    else if(a->date[1] < b->date[1])
+	            			temp = -1;
+	        			else
+	        			    temp = 0;
+					}
+				}
+			}
+		}
+	}
+    return temp;
+}
+
+/*int Man::Compare(Man *a, Man *b) {
 	char ch1[3], ch2[3];
 	int temp;;
 	ch1[0] = a->date[6];
@@ -91,7 +133,7 @@ int Man::Compare(Man *a, Man *b) {
 		}
 	    
 	}
-}
+}*/
 
 void Man::HeapSort(Man **Com, int n) {
 	int i, j;
