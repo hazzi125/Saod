@@ -21,7 +21,7 @@ public:
     
     void HeapSort(Man **Com, int n);
     
-    int BinSearch(Man *Com, int n, char str);
+    int BinSearch(Man *Com, int n, char str[2]);
 };
 
 void FillRand(int A[], int n);

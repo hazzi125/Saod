@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 	//setlocale(LC_ALL, "rus");
-	int N = 20;
+	int N = 100;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
 	
@@ -23,10 +23,11 @@ int main() {
     Company->PrintBase(Company, N);
 
 	cout << "\n";
-	char str;
+	char str[2];
 	cin >> str;
 	int i = Company->BinSearch(Company, N, str);
-	Company->PrintRec(Company, i);
+	if(i >= -1)
+	    Company->PrintRec(Company, i);
 	cout << "\n";
 	system("pause");
 	return 0;

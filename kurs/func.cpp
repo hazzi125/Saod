@@ -103,20 +103,28 @@ int Man::Compare(Man *a, Man *b) {
     return temp;
 }
 
-int Man::BinSearch(Man *Com, int n, char str) {
+int Man::BinSearch(Man *Com, int n, char str[2]) {
 	int L = 1, R = n, m;
 	bool find;
 	while(L < R) {
 		m = (L + R) / 2;
-		if(Com[m-1].date[6] < str)
+		if(Com[m-1].date[6] < str[0])
 		    L = m + 1;
+		else if(Com[m-1].date[6] == str[0]) {
+			if(Com[m-1].date[7] < str[1])
+		        L = m + 1;
+		    else
+		        R = m;
+		}
 		else
 		    R = m;   
 	}
-    if(Com[R-1].date[6] == str)
+    if((Com[R-1].date[6] == str[0]) && (Com[R-1].date[7] == str[1]))
 	    return R-1;
-	else
-	    cout << "Not found";
+	else {
+	    cout << "Not found\n";
+	    return -1;
+	}    
 }
 
 void Man::HeapSort(Man **Com, int n) {
