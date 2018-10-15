@@ -3,6 +3,15 @@
 #include <iostream>
 #include <cstdio>
 
+struct list {
+    char name[30];
+	short int num;
+	char position[22];
+	char date[10];
+	list *next;
+	int number;
+};
+
 class Man {
 private:
 	char name[30];
@@ -21,7 +30,9 @@ public:
     
     void HeapSort(Man **Com, int n);
     
-    int BinSearch(Man *Com, int n, char str[2]);
+    void PrintList(list *&head);
+    
+    void BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]);
 };
 
 void FillRand(int A[], int n);

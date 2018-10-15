@@ -10,8 +10,8 @@ using namespace std;
 // сортировка по дате рождения, ключ поиска - год рождения
 
 int main() {
-	//setlocale(LC_ALL, "rus");
-	int N = 100;
+	//setlocale(LC_ALL, "");
+	int N = 4000;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
 	
@@ -22,12 +22,17 @@ int main() {
     Company->HeapSort(B, N);
     Company->PrintBase(Company, N);
 
-	cout << "\n";
-	char str[2];
-	cin >> str;
-	int i = Company->BinSearch(Company, N, str);
-	if(i >= -1)
-	    Company->PrintRec(Company, i);
+    bool flag = 1;
+    while(flag) {
+		cout << "\nWhat year interested you? ";
+		char str[2];
+		cin >> str;
+		list *head, *tail;
+		cout << "\n";
+		Company->BinSearch(Company, head, tail, N, str);
+		cout << "Do you want to find another person? 1/0 ";
+		cin >> flag;
+	}
 	cout << "\n";
 	system("pause");
 	return 0;

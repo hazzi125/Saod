@@ -33,29 +33,43 @@ void Man::Init(Man *a, int n) {
 }
 
 void Man::PrintBase(Man *a, int n) {
-    cout << "   |   Name/Surname/Patronymic    | Num |       Position        |    Date\n";
-	cout << "---|------------------------------|-----|-----------------------|-------------\n";
-	bool flag;
+	int flag;
+	cout << "\nDo you want to print 20 more records? 1/0 ";
+	cin >> flag;
+	cout << "\n";
+    cout << "     |   Name/Surname/Patronymic    | Num |       Position        |    Date\n";
+	cout << "-----|------------------------------|-----|-----------------------|-------------";
 	int k = 0;
-	while(k < n) {
-		for(int i = 0; i < 20; i++) {
-			printf("%2d.| ", k+1);
-			cout << a[k].name << "| ";
-			printf("%3d", a[k].num);
-			cout << " | " << a[k].position << " |   " << a[k].date << "\n";
-			k++;
-	    }
-	    cout << "\nDo you want to print 20 more records? 1/0 ";
+	do {
+		if(flag == 0)
+			break;
+		else if (flag == 1) {
+			for(int i = 0; i < 20; i++) {
+				printf("%4d.| ", k+1);
+				cout << a[k].name << "| ";
+				printf("%3d", a[k].num);
+				cout << " | " << a[k].position << " |   " << a[k].date << "\n";
+				k++;
+		    }
+		}
+		else {
+			while(k < n) {
+				printf("%4d.| ", k+1);
+				cout << a[k].name << "| ";
+				printf("%3d", a[k].num);
+				cout << " | " << a[k].position << " |   " << a[k].date << "\n";
+				k++;
+		    }
+		    break;
+		}
+		cout << "\nDo you want to print 20 more records? 1/0 ";
 		cin >> flag;
 		cout << "\n";
-		if(flag == 0) {
-			break;
-		}
-	}
+	} while(k < n);
 }
 
 void Man::PrintRec(Man *a, int i) {
-	printf("%2d.| ", i+1);
+	printf("%4d.| ", i+1);
 	cout << a[i].name << "| ";
 	printf("%3d", a[i].num);
 	cout << " | " << a[i].position << " |   " << a[i].date << "\n";
@@ -103,7 +117,20 @@ int Man::Compare(Man *a, Man *b) {
     return temp;
 }
 
-int Man::BinSearch(Man *Com, int n, char str[2]) {
+void Man::PrintList(list *&head) {
+	list *p;
+	for(p = head; p; p = p->next) {
+		printf("%4d.| ", p->number);
+		cout << p->name << "| ";
+		printf("%3d", p->num);
+		cout << " | " << p->position << " |   " << p->date << "\n";
+	}
+	cout << endl;
+}
+
+void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
+	list *p;
+	head = tail = NULL;
 	int L = 1, R = n, m;
 	bool find;
 	while(L < R) {
@@ -119,11 +146,28 @@ int Man::BinSearch(Man *Com, int n, char str[2]) {
 		else
 		    R = m;   
 	}
-    if((Com[R-1].date[6] == str[0]) && (Com[R-1].date[7] == str[1]))
-	    return R-1;
+    if((Com[R-1].date[6] == str[0]) && (Com[R-1].date[7] == str[1])) {
+	    while((Com[R-1].date[6] == str[0]) && (Com[R-1].date[7] == str[1])) {
+	    	p = new list;
+	    	
+	    	strcpy(p->date, Com[R-1].date);
+	    	p->num = Com[R-1].num;
+	    	strcpy(p->position, Com[R-1].position);
+	    	strcpy(p->name, Com[R-1].name);
+	    	p->next = NULL;
+	    	p->number = R;
+	    	
+			if(head != NULL)
+			    tail->next = p;
+			else
+			    head = p;
+			tail = p;
+	    	R++;
+		}
+		PrintList(head);
+	}
 	else {
-	    cout << "Not found\n";
-	    return -1;
+	    cout << "Not found\n\n";
 	}    
 }
 
