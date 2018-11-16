@@ -28,7 +28,7 @@ public:
     
     int Compare(Man *a, Man *b);
     
-    void HeapSort(Man **Com, int n);
+    void HeapSort(Man *&Com, int n);
     
     void PrintList(list *&head);
     

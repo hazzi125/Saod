@@ -10,16 +10,10 @@ using namespace std;
 // сортировка по дате рождения, ключ поиска - год рождения
 
 int main() {
-	//setlocale(LC_ALL, "");
 	int N = 4000;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
-	
-	Man *B[N];
-	for(int i = 0; i < N; i++)
-	    B[i] = &Company[i];
-	    
-    Company->HeapSort(B, N);
+    Company->HeapSort(Company, N);
     Company->PrintBase(Company, N);
 
     bool flag = 1;
