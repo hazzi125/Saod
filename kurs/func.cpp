@@ -171,20 +171,20 @@ void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 	}    
 }
 
-void Man::HeapSort(Man **Com, int n) {
+void Man::HeapSort(Man *&Com, int n) {
 	int i, j;
-	Man x, temp;
+	Man *x;
 	int L = n/2;
 	while(L > 0) {
 		i = L;
 		for( ; ; ) {
-			x = *Com[i-1];
+			x = &Com[i-1];
 			j = 2*i;
 			if(j > n)
 				break;
-			if((j < n-1) && (Compare(Com[j], Com[j-1]) >= 0))
+			if((j < n-1) && (Compare(&Com[j], &Com[j-1]) >= 0))
 				j++;
-			if(Compare(&x, Com[j-1]) >= 0)
+			if(Compare(x, &Com[j-1]) >= 0)
 				break;     
 			swap(Com[i-1], Com[j-1]);		
 			i = j;
@@ -198,13 +198,13 @@ void Man::HeapSort(Man **Com, int n) {
 		R--;
 		i = 1;
 		for( ; ; ) {
-			x = *Com[i-1];
+			x = &Com[i-1];
 			j = 2*i;
 			if(j > R)
 				break;
-			if((j < R) && (Compare(Com[j], Com[j-1]) >= 0))
+			if((j < R) && (Compare(&Com[j], &Com[j-1]) >= 0))
 				j++;
-			if(Compare(&x, Com[j-1]) > 0)
+			if(Compare(x, &Com[j-1]) > 0)
 				break;
 			        
 			swap(Com[i-1], Com[j-1]);
