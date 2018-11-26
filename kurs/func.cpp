@@ -75,44 +75,49 @@ void Man::PrintRec(Man *a, int i) {
 	cout << " | " << a[i].position << " |   " << a[i].date << "\n";
 }
 
-int Man::Compare(Man *a, Man *b) {
+int Man::Compare(Man *a, Man *b, bool field) {
 	int temp;
- 
-	if(a->date[6] > b->date[6])
-	    temp = 1;
-	else if(a->date[6] < b->date[6])
-	    temp = -1;
-	else {
-		if(a->date[7] > b->date[7])
-	        temp = 1;
-	    else if(a->date[7] < b->date[7])
-	        temp = -1;
-	    else {
-	    	if(a->date[3] > b->date[3])
-	            temp = 1;
-	        else if(a->date[3] < b->date[3])
-	            temp = -1;
-	        else {
-	        	if(a->date[4] > b->date[4])
-	                temp = 1;
-	            else if(a->date[4] < b->date[4])
-	                temp = -1;
-	            else {
-	            	if(a->date[0] > b->date[0])
-	                    temp = 1;
-	                else if(a->date[0] < b->date[0])
-	                    temp = -1;
-	                else {
-	                	if(a->date[1] > b->date[1])
-	            			temp = 1;
-	        		    else if(a->date[1] < b->date[1])
-	            			temp = -1;
-	        			else
-	        			    temp = 0;
+	if(field) {
+		if(a->date[6] > b->date[6])
+		    temp = 1;
+		else if(a->date[6] < b->date[6])
+		    temp = -1;
+		else {
+			if(a->date[7] > b->date[7])
+		        temp = 1;
+		    else if(a->date[7] < b->date[7])
+		        temp = -1;
+		    else {
+		    	if(a->date[3] > b->date[3])
+		            temp = 1;
+		        else if(a->date[3] < b->date[3])
+		            temp = -1;
+		        else {
+		        	if(a->date[4] > b->date[4])
+		                temp = 1;
+		            else if(a->date[4] < b->date[4])
+		                temp = -1;
+		            else {
+		            	if(a->date[0] > b->date[0])
+		                    temp = 1;
+		                else if(a->date[0] < b->date[0])
+		                    temp = -1;
+		                else {
+		                	if(a->date[1] > b->date[1])
+		            			temp = 1;
+		        		    else if(a->date[1] < b->date[1])
+		            			temp = -1;
+		        			else
+		        			    temp = 0;
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	else {
+		temp = strcmp(a->name, b->name);
 	}
     return temp;
 }
@@ -171,7 +176,7 @@ void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 	}    
 }
 
-void Man::HeapSort(Man *&Com, int n) {
+void Man::HeapSort(Man *&Com, int n, bool field) {
 	int i, j;
 	Man *x;
 	int L = n/2;
@@ -182,9 +187,9 @@ void Man::HeapSort(Man *&Com, int n) {
 			j = 2*i;
 			if(j > n)
 				break;
-			if((j < n-1) && (Compare(&Com[j], &Com[j-1]) >= 0))
+			if((j < n-1) && (Compare(&Com[j], &Com[j-1], field) >= 0))
 				j++;
-			if(Compare(x, &Com[j-1]) >= 0)
+			if(Compare(x, &Com[j-1], field) >= 0)
 				break;     
 			swap(Com[i-1], Com[j-1]);		
 			i = j;
@@ -202,13 +207,59 @@ void Man::HeapSort(Man *&Com, int n) {
 			j = 2*i;
 			if(j > R)
 				break;
-			if((j < R) && (Compare(&Com[j], &Com[j-1]) >= 0))
+			if((j < R) && (Compare(&Com[j], &Com[j-1], field) >= 0))
 				j++;
-			if(Compare(x, &Com[j-1]) > 0)
+			if(Compare(x, &Com[j-1], field) > 0)
 				break;
 			        
 			swap(Com[i-1], Com[j-1]);
 			i = j;
 		}
+	}
+}
+
+void Man::SDP(Man *&Com, tree *&p, int i) {
+	if(p == NULL) {
+		p = new tree;
+		strcpy(p->date, Com[i].date);
+	    p->num = Com[i].num;
+	    strcpy(p->position, Com[i].position);
+	    strcpy(p->name, Com[i].name);
+		p->left = p->right = NULL;
+	}
+	//else if(Com[i].data < p->data)
+	else if(strcmp(Com[i].name, p->name) < 0)
+	    SDP(Com, p->left, i);
+	else if(strcmp(Com[i].name, p->name) >= 0)
+	    SDP(Com, p->right, i);
+}
+
+int wes, summa;
+
+void Man::CreateTree(Man *&Com, int L, int R, tree *&p) {
+	wes = summa = 0;
+	int i;
+	if(L <= R) {
+		for(i = L; i <= R; i++) {
+			wes += Com[i].num;
+		}
+		for(i = L; i < R; i++) {
+			if((summa < wes/2) && (summa + Com[i].num >= wes/2))
+			    break;
+			summa += Com[i].num;
+		}
+		SDP(Com, p, i);
+		this->CreateTree(Com, L, i-1, p);
+		this->CreateTree(Com, i+1, R, p);
+	}
+}
+
+void Man::Obhod(tree *p) {
+	if(p != NULL) {
+		Obhod(p->left);
+		cout << p->name << "| ";
+		printf("%3d", p->num);
+		cout << " | " << p->position << " |   " << p->date << "\n";
+		Obhod(p->right);
 	}
 }
