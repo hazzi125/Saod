@@ -33,9 +33,7 @@ void Man::Init(Man *a, int n) {
 }
 
 void Man::PrintBase(Man *a, int n) {
-	int flag;
-	cout << "\nDo you want to print 20 more records? 1/0 ";
-	cin >> flag;
+	int flag = 1;
 	cout << "\n";
     cout << "     |   Name/Surname/Patronymic    | Num |       Position        |    Date\n";
 	cout << "-----|------------------------------|-----|-----------------------|-------------";
@@ -75,49 +73,43 @@ void Man::PrintRec(Man *a, int i) {
 	cout << " | " << a[i].position << " |   " << a[i].date << "\n";
 }
 
-int Man::Compare(Man *a, Man *b, bool field) {
+int Man::Compare(Man *a, Man *b) {
 	int temp;
-	if(field) {
-		if(a->date[6] > b->date[6])
-		    temp = 1;
-		else if(a->date[6] < b->date[6])
-		    temp = -1;
-		else {
-			if(a->date[7] > b->date[7])
-		        temp = 1;
-		    else if(a->date[7] < b->date[7])
-		        temp = -1;
-		    else {
-		    	if(a->date[3] > b->date[3])
-		            temp = 1;
-		        else if(a->date[3] < b->date[3])
-		            temp = -1;
-		        else {
-		        	if(a->date[4] > b->date[4])
-		                temp = 1;
-		            else if(a->date[4] < b->date[4])
-		                temp = -1;
-		            else {
-		            	if(a->date[0] > b->date[0])
-		                    temp = 1;
-		                else if(a->date[0] < b->date[0])
-		                    temp = -1;
-		                else {
-		                	if(a->date[1] > b->date[1])
-		            			temp = 1;
-		        		    else if(a->date[1] < b->date[1])
-		            			temp = -1;
-		        			else
-		        			    temp = 0;
-						}
+	if(a->date[6] > b->date[6])
+		temp = 1;
+	else if(a->date[6] < b->date[6])
+	    temp = -1;
+	else {
+		if(a->date[7] > b->date[7])
+	        temp = 1;
+	    else if(a->date[7] < b->date[7])
+	        temp = -1;
+	    else {
+	    	if(a->date[3] > b->date[3])
+	            temp = 1;
+	        else if(a->date[3] < b->date[3])
+	            temp = -1;
+	        else {
+	        	if(a->date[4] > b->date[4])
+	                temp = 1;
+	            else if(a->date[4] < b->date[4])
+	                temp = -1;
+	            else {
+	            	if(a->date[0] > b->date[0])
+	                    temp = 1;
+	                else if(a->date[0] < b->date[0])
+	                    temp = -1;
+	                else {
+	                	if(a->date[1] > b->date[1])
+	            			temp = 1;
+	        		    else if(a->date[1] < b->date[1])
+	            			temp = -1;
+	        			else
+	        			    temp = 0;
 					}
 				}
 			}
 		}
-	}
-	
-	else {
-		temp = strcmp(a->name, b->name);
 	}
     return temp;
 }
@@ -138,6 +130,7 @@ void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 	head = tail = NULL;
 	int L = 1, R = n, m;
 	bool find;
+	int flag_tree;
 	while(L < R) {
 		m = (L + R) / 2;
 		if(Com[m-1].date[6] < str[0])
@@ -162,21 +155,33 @@ void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 	    	p->next = NULL;
 	    	p->number = R;
 	    	
-			if(head != NULL)
+			if(head) {
+				p->prew = tail;
 			    tail->next = p;
-			else
+			}
+			else {
+				p->prew = NULL;
 			    head = p;
+			}
 			tail = p;
 	    	R++;
 		}
 		PrintList(head);
+		
+		cout << "Do you want to create tree? 1/0 ";
+		cin >> flag_tree;
+		if(flag_tree == 1) {
+			tree *root = NULL;
+			Com->CreateTree(head, tail, root);
+			Com->Obhod(root);
+		}
 	}
 	else {
 	    cout << "Not found\n\n";
 	}    
 }
 
-void Man::HeapSort(Man *&Com, int n, bool field) {
+void Man::HeapSort(Man *&Com, int n) {
 	int i, j;
 	Man *x;
 	int L = n/2;
@@ -187,9 +192,9 @@ void Man::HeapSort(Man *&Com, int n, bool field) {
 			j = 2*i;
 			if(j > n)
 				break;
-			if((j < n-1) && (Compare(&Com[j], &Com[j-1], field) >= 0))
+			if((j < n-1) && (Compare(&Com[j], &Com[j-1]) >= 0))
 				j++;
-			if(Compare(x, &Com[j-1], field) >= 0)
+			if(Compare(x, &Com[j-1]) >= 0)
 				break;     
 			swap(Com[i-1], Com[j-1]);		
 			i = j;
@@ -207,9 +212,9 @@ void Man::HeapSort(Man *&Com, int n, bool field) {
 			j = 2*i;
 			if(j > R)
 				break;
-			if((j < R) && (Compare(&Com[j], &Com[j-1], field) >= 0))
+			if((j < R) && (Compare(&Com[j], &Com[j-1]) >= 0))
 				j++;
-			if(Compare(x, &Com[j-1], field) > 0)
+			if(Compare(x, &Com[j-1]) > 0)
 				break;
 			        
 			swap(Com[i-1], Com[j-1]);
@@ -218,45 +223,48 @@ void Man::HeapSort(Man *&Com, int n, bool field) {
 	}
 }
 
-void Man::SDP(Man *&Com, tree *&p, int i) {
-	if(p == NULL) {
-		p = new tree;
-		strcpy(p->date, Com[i].date);
-	    p->num = Com[i].num;
-	    strcpy(p->position, Com[i].position);
-	    strcpy(p->name, Com[i].name);
-		p->left = p->right = NULL;
-	}
-	//else if(Com[i].data < p->data)
-	else if(strcmp(Com[i].name, p->name) < 0)
-	    SDP(Com, p->left, i);
-	else if(strcmp(Com[i].name, p->name) >= 0)
-	    SDP(Com, p->right, i);
-}
-
 int wes, summa;
 
-void Man::CreateTree(Man *&Com, int L, int R, tree *&p) {
+void Man::SDP(list *&pl, tree *&pt) {
+	if(pt == NULL) {
+		pt = new tree;
+		strcpy(pt->date, pl->date);
+	    pt->num = pl->num;
+	    strcpy(pt->position, pl->position);
+	    strcpy(pt->name, pl->name);
+	    pt->number = pl->number;
+		pt->left = pt->right = NULL;
+	}
+	else if(strcmp(pl->name, pt->name) < 0)
+	    SDP(pl, pt->left);
+	else if(strcmp(pl->name, pt->name) >= 0)
+	    SDP(pl, pt->right);
+}
+
+void Man::CreateTree(list *&p_head, list *&p_tail, tree *&pt) {
 	wes = summa = 0;
-	int i;
-	if(L <= R) {
-		for(i = L; i <= R; i++) {
-			wes += Com[i].num;
+	list *pl;
+	if(p_head->number <= p_tail->number) {
+		for(pl = p_head; pl != p_tail->next; pl = pl->next) {
+			wes += pl->num;
 		}
-		for(i = L; i < R; i++) {
-			if((summa < wes/2) && (summa + Com[i].num >= wes/2))
+		for(pl = p_head; pl != p_tail; pl = pl->next) {
+			if((summa < wes/2) && (summa + pl->num >= wes/2))
 			    break;
-			summa += Com[i].num;
+			summa += pl->num;
 		}
-		SDP(Com, p, i);
-		this->CreateTree(Com, L, i-1, p);
-		this->CreateTree(Com, i+1, R, p);
+		SDP(pl, pt);
+		if(pl->prew != NULL)
+		    this->CreateTree(p_head, pl->prew, pt);
+	    if(pl->next != NULL)
+		    this->CreateTree(pl->next, p_tail, pt);
 	}
 }
 
 void Man::Obhod(tree *p) {
 	if(p != NULL) {
 		Obhod(p->left);
+		printf("%4d.| ", p->number);
 		cout << p->name << "| ";
 		printf("%3d", p->num);
 		cout << " | " << p->position << " |   " << p->date << "\n";

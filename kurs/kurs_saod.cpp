@@ -10,18 +10,14 @@ using namespace std;
 // сортировка по дате рождения, ключ поиска - год рождения
 
 int main() {
-	int N = 4000;
-	tree *root = NULL;
+	int N = 2000;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
-    Company->HeapSort(Company, N, 0);
-    //Company->PrintBase(Company, N);
-    
-    Company->CreateTree(Company, 0, N-1, root);
-    Company->Obhod(root);
+    Company->HeapSort(Company, N);
+    Company->PrintBase(Company, N);
 
-    bool flag = 1;
-    while(flag) {
+    int flag = 1;
+    while(flag == 1) {
 		cout << "\nWhat year interested you? ";
 		char str[2];
 		cin >> str;
@@ -31,7 +27,7 @@ int main() {
 		cout << "Do you want to find another person? 1/0 ";
 		cin >> flag;
 	}
-	cout << "\n";
+	cout << "\nBuy\n\n";
 	system("pause");
 	return 0;
 }
