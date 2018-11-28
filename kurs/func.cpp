@@ -7,17 +7,6 @@
 
 using namespace std;
 
-void FillRand(int A[], int n) {
-	for(int i=0; i<n; i++)
-		A[i]=rand()% 20;
-}
-
-void PrintMas(int A[], int n) {
-	for(int i=0; i<n; i++)
-	    cout<<A[i]<<" ";
-	cout<<endl;
-}
-
 void swap(Man *&a, Man *&b) {
 	Man temp;
 	temp = *a;
@@ -125,6 +114,8 @@ void Man::PrintList(list *&head) {
 	cout << endl;
 }
 
+bool tree_find;
+
 void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 	list *p;
 	head = tail = NULL;
@@ -170,10 +161,17 @@ void Man::BinSearch(Man *Com, list *&head, list *&tail, int n, char str[2]) {
 		
 		cout << "Do you want to create tree? 1/0 ";
 		cin >> flag_tree;
+		cout << "\n";
 		if(flag_tree == 1) {
 			tree *root = NULL;
 			Com->CreateTree(head, tail, root);
 			Com->Obhod(root);
+			cout << "\nWhat name interested you? ";
+			char str[22];
+			cin >> str;
+			cout << "\n";
+			tree_find = 0;
+			Com->TreeSearch(str, root);
 		}
 	}
 	else {
@@ -235,9 +233,9 @@ void Man::SDP(list *&pl, tree *&pt) {
 	    pt->number = pl->number;
 		pt->left = pt->right = NULL;
 	}
-	else if(strcmp(pl->name, pt->name) < 0)
+	else if(strcmp(pl->position, pt->position) < 0)
 	    SDP(pl, pt->left);
-	else if(strcmp(pl->name, pt->name) >= 0)
+	else if(strcmp(pl->position, pt->position) >= 0)
 	    SDP(pl, pt->right);
 }
 
@@ -261,13 +259,53 @@ void Man::CreateTree(list *&p_head, list *&p_tail, tree *&pt) {
 	}
 }
 
-void Man::Obhod(tree *p) {
-	if(p != NULL) {
-		Obhod(p->left);
-		printf("%4d.| ", p->number);
-		cout << p->name << "| ";
-		printf("%3d", p->num);
-		cout << " | " << p->position << " |   " << p->date << "\n";
-		Obhod(p->right);
+void Man::Obhod(tree *pt) {
+	if(pt) {
+		Obhod(pt->left);
+		printf("%4d.| ", pt->number);
+		cout << pt->name << "| ";
+		printf("%3d", pt->num);
+		cout << " | " << pt->position << " |   " << pt->date << "\n";
+		Obhod(pt->right);
 	}
+}
+
+void Man::TreeSearch(char *str, tree *&pt) {
+	if(pt) {
+		int temp = Compare(str, pt->position);
+		if(temp == 0) {
+			tree_find = 1;
+	        printf("%4d.| ", pt->number);
+			cout << pt->name << "| ";
+			printf("%3d", pt->num);
+			cout << " | " << pt->position << " |   " << pt->date << "\n";
+			TreeSearch(str, pt->right);
+	    }
+		else if(temp < 0)
+		    TreeSearch(str, pt->left);
+		else if(temp > 0)
+	        TreeSearch(str, pt->right);
+	}
+	else if(!tree_find){
+		cout << "Elem was not find\n";
+	}
+}
+
+int Man::Compare(char *str1, char *str2) {
+	int temp = 0;
+	for(int i = 0; str1[i] != '\0'; i++) {
+		if(str1[i] == '_')
+		    str1[i] = ' ';
+		if(str1[i] > str2[i]) {
+			temp = 1;
+			break;
+		}
+		else if(str1[i] < str2[i]) {
+			temp = -1;
+			break;
+		}
+		else
+		    temp = 0;
+	}
+	return temp;
 }

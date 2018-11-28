@@ -24,7 +24,7 @@ int main() {
 		list *head, *tail;
 		cout << "\n";
 		Company->BinSearch(Company, head, tail, N, str);
-		cout << "Do you want to find another person? 1/0 ";
+		cout << "\nDo you want to find another person? 1/0 ";
 		cin >> flag;
 	}
 	cout << "\nBuy\n\n";
