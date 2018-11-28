@@ -10,24 +10,24 @@ using namespace std;
 // сортировка по дате рождения, ключ поиска - год рождения
 
 int main() {
-	int N = 4000;
+	int N = 2000;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
     Company->HeapSort(Company, N);
     Company->PrintBase(Company, N);
 
-    bool flag = 1;
-    while(flag) {
+    int flag = 1;
+    while(flag == 1) {
 		cout << "\nWhat year interested you? ";
 		char str[2];
 		cin >> str;
 		list *head, *tail;
 		cout << "\n";
 		Company->BinSearch(Company, head, tail, N, str);
-		cout << "Do you want to find another person? 1/0 ";
+		cout << "\nDo you want to find another person? 1/0 ";
 		cin >> flag;
 	}
-	cout << "\n";
+	cout << "\nBuy\n\n";
 	system("pause");
 	return 0;
 }
