@@ -14,6 +14,20 @@ void swap(Man *&a, Man *&b) {
 	*b = temp;
 }
 
+void InsertSort(code *a, int n) {
+    int i, j, k = 0;
+    code t;
+    for (i = 1; i < n; i++) {
+        t = a[i];
+        j = i - 1;
+        while (j >= 0 && a[j].p < t.p) {
+            a[j + 1] = a[j];
+            j = j -1;
+        }
+        a[j+1] = t;
+    }
+}
+
 void Man::Init(Man *a, int n) {
     FILE *f;
     f = fopen("testBase2.dat", "rb");
@@ -274,6 +288,7 @@ void Man::TreeSearch(char *str, tree *&pt) {
 	if(pt) {
 		int temp = Compare(str, pt->position);
 		if(temp == 0) {
+			TreeSearch(str, pt->left);
 			tree_find = 1;
 	        printf("%4d.| ", pt->number);
 			cout << pt->name << "| ";
@@ -309,3 +324,57 @@ int Man::Compare(char *str1, char *str2) {
 	}
 	return temp;
 }
+
+void Man::Calculate_Probs(int n, int n_symb, code *&symb, Man *Com) {
+	for(int i = 0; i < n_symb; i++) {
+		symb[i].c = i+32;
+	}
+	int k = (30 + 3 + 22 + 10) * n;
+	
+	char s[10];
+		//itoa(p->data, s, 10);
+    int count;
+    for(int i = 0; i < n_symb; i++) {
+    	count = 0;
+		for(int j = 0; j < n; j++) {
+			for(int l = 0; l < 30; l++) {
+				if(Com[j].name[l] == symb[i].c)
+			        count++;
+			}
+			
+			itoa(Com[j].num, s, 10);
+			for(int l = 0; l < 10; l++) {
+				if(s[l] == symb[i].c)
+			        count++;
+			}
+			
+			for(int l = 0; l < 22; l++) {
+				if(Com[j].position[l] == symb[i].c)
+			        count++;
+			}
+			
+			for(int l = 0; l < 10; l++) {
+				if(Com[j].date[l] == symb[i].c)
+			        count++;
+			}
+		}
+		//cout << count << " ";
+		if(count)
+		    symb[i].p = (float) (100 * count) / k;
+		else
+		    symb[i].p = 0;
+	}
+	
+	InsertSort(symb, n_symb);
+	cout << "\n";
+	for(int i = 0; i < n_symb; i++)
+	    cout << symb[i].p << " " << symb[i].c << "\n";
+	    
+	cout << "\n";
+}
+
+
+
+
+
+

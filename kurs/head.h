@@ -21,6 +21,11 @@ struct tree {
 	tree *left, *right;
 };
 
+struct code {
+	char c;
+	float p;
+};
+
 class Man {
 private:
 	char name[30];
@@ -41,8 +46,10 @@ public:
     void SDP(list *&pl, tree *&pt);
     void Obhod(tree *pt);
     void TreeSearch(char *str, tree *&pt);
+    void Calculate_Probs(int n, int n_symb, code *&symb, Man *Com);
 };
 
 void swap(Man *&a, Man *&b);
+void InsertSort(code *a, int n);
 
 #endif
