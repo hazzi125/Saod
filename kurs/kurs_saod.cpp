@@ -28,10 +28,9 @@ int main() {
 		cin >> flag;
 	}
 	
-	int n_symb = 256 - 32 - 16;
 	code *symb = new code[n_symb];
-	
-	Company->Calculate_Probs(N, n_symb, symb, Company);
+	int cx = 0;
+	Company->Coding_Fano(cx, N, symb, Company);
 	
 	system("pause");
 	cout << "\nBuy\n\n";

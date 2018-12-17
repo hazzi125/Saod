@@ -325,15 +325,15 @@ int Man::Compare(char *str1, char *str2) {
 	return temp;
 }
 
-void Man::Calculate_Probs(int n, int n_symb, code *&symb, Man *Com) {
+void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 	for(int i = 0; i < n_symb; i++) {
 		symb[i].c = i+32;
 	}
 	int k = (30 + 3 + 22 + 10) * n;
-	
-	char s[10];
-		//itoa(p->data, s, 10);
+	char s[3];
     int count;
+	cx = 0;
+	
     for(int i = 0; i < n_symb; i++) {
     	count = 0;
 		for(int j = 0; j < n; j++) {
@@ -358,23 +358,142 @@ void Man::Calculate_Probs(int n, int n_symb, code *&symb, Man *Com) {
 			        count++;
 			}
 		}
-		//cout << count << " ";
-		if(count)
+		if(count) {
 		    symb[i].p = (float) (100 * count) / k;
+		    cx++;
+		}
 		else
 		    symb[i].p = 0;
 	}
 	
 	InsertSort(symb, n_symb);
 	cout << "\n";
-	for(int i = 0; i < n_symb; i++)
-	    cout << symb[i].p << " " << symb[i].c << "\n";
-	    
+
+	/*float *P = new float[cx];
+	
+	for(int i = 0; i < cx; i++) {
+	    P[i] = symb[i].p;
+	}*/
+	
+	Fano(0, cx-1, 0, symb);
+	
+	cout << "Symbol | Probability |  Length  | Code word\n";
+	cout << "-------|-------------|----------|------------\n";
+	for(int i = 0; i < cx; i++) {
+		printf("%4c   |", symb[i].c);
+		printf(" %9f   |", symb[i].p);
+		printf("%6d    |", Length[i]);
+	    for(int j = 0; j <= Length[i]; j++)
+	        cout << C[i][j];
+
+	    cout << "\n";
+	}
 	cout << "\n";
+	int flag = 1;
+	do {
+		this->PrintCode(Com, symb, cx);
+		cout << "\nDo you want to coding a next record? 1/0 ";
+		cin >> flag;
+		
+	} while(flag);
 }
 
+int m = 0;
+float sl = 0, sr = 0;
 
+int Med(int L, int R, code *symb) {
+	sl = 0;
+	for(int i = L; i < R; i++)
+	    sl += symb[i].p;
+	sr = symb[R].p;
+	m = R;
+	while(sl >= sr) {
+		m--;
+		sl -= symb[m].p;
+		sr += symb[m].p;
+	}
+	return m;
+}
 
+void Fano(int L, int R, int k, code *symb) {
+	if(L < R) {
+		k++;
+		int m = Med(L, R, symb);
+		for(int i = L; i <= R; i++) {
+			if(i <= m) {
+				C[i][k] = '0';
+				Length[i]++;
+			}
+			else {
+				C[i][k] = '1';
+				Length[i]++;
+			}
+		}
+		Fano(L, m, k, symb);
+		Fano(m+1, R, k, symb);
+	}
+}
 
-
-
+void Man::PrintCode(Man *Com, code *symb, int cx) {
+	int x;
+	cout << "What record interests you? ";
+	cin >> x;
+	if((x > 0) && (x <= 4000)) {
+		printf("\n%4d.| ", x);
+		x--;
+		cout << Com[x].name << "| ";
+		printf("%3d", Com[x].num);
+		cout << " | " << Com[x].position << " |   " << Com[x].date << "\n\n";
+		
+		cout << "Name: ";
+		for(int i = 0; i < 30; i++) {
+			for(int j = 0; j < cx; j++) {
+				if(Com[x].name[i] == symb[j].c) {
+					for(int k = 0; k <= Length[j]; k++)
+					    cout << C[j][k];	    
+					cout << " ";
+				}
+			}
+		}
+		
+		cout << "\n\nNumber: ";
+		char s[3];
+		itoa(Com[x].num, s, 10);
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < cx; j++) {
+				if(s[i] == symb[j].c) {
+					for(int k = 0; k <= Length[j]; k++)
+					    cout << C[j][k];	    
+					cout << " ";
+				}
+			}
+		}
+		
+		cout << "\n\nPosition: ";
+		for(int i = 0; i < 22; i++) {
+			for(int j = 0; j < cx; j++) {
+				if(Com[x].position[i] == symb[j].c) {
+					for(int k = 0; k <= Length[j]; k++)
+					    cout << C[j][k];	    
+					cout << " ";
+				}
+			}
+		}
+		
+		cout << "\n\nDate: ";
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < cx; j++) {
+				if(Com[x].date[i] == symb[j].c) {
+					for(int k = 0; k <= Length[j]; k++)
+					    cout << C[j][k];	    
+					cout << " ";
+				}
+			}
+		}
+		cout << "\n";
+	}
+	
+	else {
+		cout << "\nYou entered wrong value. Try again";
+	}
+}
