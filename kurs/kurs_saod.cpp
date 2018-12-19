@@ -10,7 +10,7 @@ using namespace std;
 // сортировка по дате рождения, ключ поиска - год рождения
 
 int main() {
-	int N = 2000;
+	int N = 4000;
 	Man *Company = new Man[N];
 	Company->Init(Company, N);
     Company->HeapSort(Company, N);
@@ -27,7 +27,11 @@ int main() {
 		cout << "\nDo you want to find another person? 1/0 ";
 		cin >> flag;
 	}
-	cout << "\nBuy\n\n";
+	
+	code *symb = new code[n_symb];
+	int cx = 0;
+	Company->Coding_Fano(cx, N, symb, Company);
+	
 	system("pause");
 	return 0;
 }

@@ -21,6 +21,15 @@ struct tree {
 	tree *left, *right;
 };
 
+struct code {
+	char c;
+	float p;
+};
+
+const int n_symb = 256 - 32 - 16;
+char C[n_symb][n_symb];
+int Length[n_symb];
+
 class Man {
 private:
 	char name[30];
@@ -41,8 +50,13 @@ public:
     void SDP(list *&pl, tree *&pt);
     void Obhod(tree *pt);
     void TreeSearch(char *str, tree *&pt);
+    void Coding_Fano(int &cx, int n, code *&symb, Man *Com);
+    void PrintCode(Man *Com, code *symb, int cx);
 };
 
 void swap(Man *&a, Man *&b);
+void InsertSort(code *a, int n);
+int Med(int L, int R, code *symb);
+void Fano(int L, int R, int k, code *symb);
 
 #endif
