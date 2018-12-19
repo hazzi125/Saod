@@ -33,6 +33,5 @@ int main() {
 	Company->Coding_Fano(cx, N, symb, Company);
 	
 	system("pause");
-	cout << "\nBuy\n\n";
 	return 0;
 }

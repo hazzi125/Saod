@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <clocale>
 #include <string.h>
+#include <cmath>
 
 using namespace std;
 
@@ -330,7 +331,7 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 		symb[i].c = i+32;
 	}
 	int k = (30 + 3 + 22 + 10) * n;
-	char s[3];
+	char s[4];
     int count;
 	cx = 0;
 	
@@ -359,7 +360,7 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 			}
 		}
 		if(count) {
-		    symb[i].p = (float) (100 * count) / k;
+		    symb[i].p = (float) (count) / k;
 		    cx++;
 		}
 		else
@@ -368,12 +369,6 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 	
 	InsertSort(symb, n_symb);
 	cout << "\n";
-
-	/*float *P = new float[cx];
-	
-	for(int i = 0; i < cx; i++) {
-	    P[i] = symb[i].p;
-	}*/
 	
 	Fano(0, cx-1, 0, symb);
 	
@@ -389,6 +384,23 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 	    cout << "\n";
 	}
 	cout << "\n";
+	float med_length = 0;
+	float entropy = 0;
+	float sum_p = 0;
+	for(int i = 0; i < cx; i++) {
+		med_length += symb[i].p * Length[i];
+		entropy += symb[i].p * log2(symb[i].p);
+		sum_p += symb[i].p;
+	}
+	entropy *= (-1);
+	cout << "\n" << cx << "\n";
+	cout << "Sum of probabilities = " << sum_p << "\n";
+	cout << "Medium length = " << med_length << "\n";
+	cout << "Entropy = " << entropy << "\n\n\n";
+	
+	cout << "Medium L >= Entropy\n";
+	cout << "Medium L < Entropy + 1\n\n";
+	
 	int flag = 1;
 	do {
 		this->PrintCode(Com, symb, cx);
