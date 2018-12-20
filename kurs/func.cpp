@@ -344,7 +344,7 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 			}
 			
 			itoa(Com[j].num, s, 10);
-			for(int l = 0; l < 10; l++) {
+			for(int l = 0; s[l] != '\0'; l++) {
 				if(s[l] == symb[i].c)
 			        count++;
 			}
@@ -393,8 +393,6 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 		sum_p += symb[i].p;
 	}
 	entropy *= (-1);
-	cout << "\n" << cx << "\n";
-	cout << "Sum of probabilities = " << sum_p << "\n";
 	cout << "Medium length = " << med_length << "\n";
 	cout << "Entropy = " << entropy << "\n\n\n";
 	
@@ -450,6 +448,20 @@ void Man::PrintCode(Man *Com, code *symb, int cx) {
 	int x;
 	cout << "What record interests you? ";
 	cin >> x;
+	system("cls");
+	
+	cout << "Symbol | Probability |  Length  | Code word\n";
+	cout << "-------|-------------|----------|------------\n";
+	for(int i = 0; i < cx; i++) {
+		printf("%4c   |", symb[i].c);
+		printf(" %9f   |", symb[i].p);
+		printf("%6d    |", Length[i]);
+	    for(int j = 0; j <= Length[i]; j++)
+	        cout << C[i][j];
+
+	    cout << "\n";
+	}
+	
 	if((x > 0) && (x <= 4000)) {
 		printf("\n%4d.| ", x);
 		x--;
@@ -464,19 +476,21 @@ void Man::PrintCode(Man *Com, code *symb, int cx) {
 					for(int k = 0; k <= Length[j]; k++)
 					    cout << C[j][k];	    
 					cout << " ";
+					break;
 				}
 			}
 		}
 		
 		cout << "\n\nNumber: ";
-		char s[3];
+		char s[4];
 		itoa(Com[x].num, s, 10);
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; s[i] != '\0'; i++) {
 			for(int j = 0; j < cx; j++) {
 				if(s[i] == symb[j].c) {
 					for(int k = 0; k <= Length[j]; k++)
 					    cout << C[j][k];	    
 					cout << " ";
+					break;
 				}
 			}
 		}
@@ -488,6 +502,7 @@ void Man::PrintCode(Man *Com, code *symb, int cx) {
 					for(int k = 0; k <= Length[j]; k++)
 					    cout << C[j][k];	    
 					cout << " ";
+					break;
 				}
 			}
 		}
@@ -499,6 +514,7 @@ void Man::PrintCode(Man *Com, code *symb, int cx) {
 					for(int k = 0; k <= Length[j]; k++)
 					    cout << C[j][k];	    
 					cout << " ";
+					break;
 				}
 			}
 		}
