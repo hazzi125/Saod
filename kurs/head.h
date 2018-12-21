@@ -26,7 +26,8 @@ struct code {
 	float p;
 };
 
-const int n_symb = 256 - 32 - 16;
+const int n_symb = 256;
+code symb[n_symb];
 char C[n_symb][n_symb];
 int Length[n_symb];
 
@@ -50,8 +51,7 @@ public:
     void SDP(list *&pl, tree *&pt);
     void Obhod(tree *pt);
     void TreeSearch(char *str, tree *&pt);
-    void Coding_Fano(int &cx, int n, code *&symb, Man *Com);
-    void PrintCode(Man *Com, code *symb, int cx);
+    void Coding_Fano();
 };
 
 void swap(Man *&a, Man *&b);

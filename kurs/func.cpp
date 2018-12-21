@@ -31,7 +31,7 @@ void InsertSort(code *a, int n) {
 
 void Man::Init(Man *a, int n) {
     FILE *f;
-    f = fopen("testBase2.dat", "rb");
+    f = fopen("testBase2.dat", "r");
     fread(a, sizeof(*a), n, f);
     fclose(f);
 }
@@ -326,55 +326,44 @@ int Man::Compare(char *str1, char *str2) {
 	return temp;
 }
 
-void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
+void Man::Coding_Fano() {
+	FILE *f;
+    f = fopen("testBase2.dat", "r");
+	
 	for(int i = 0; i < n_symb; i++) {
-		symb[i].c = i+32;
-	}
-	int k = (30 + 3 + 22 + 10) * n;
-	char s[4];
-    int count;
-	cx = 0;
-	
-    for(int i = 0; i < n_symb; i++) {
-    	count = 0;
-		for(int j = 0; j < n; j++) {
-			for(int l = 0; l < 30; l++) {
-				if(Com[j].name[l] == symb[i].c)
-			        count++;
-			}
-			
-			itoa(Com[j].num, s, 10);
-			for(int l = 0; s[l] != '\0'; l++) {
-				if(s[l] == symb[i].c)
-			        count++;
-			}
-			
-			for(int l = 0; l < 22; l++) {
-				if(Com[j].position[l] == symb[i].c)
-			        count++;
-			}
-			
-			for(int l = 0; l < 10; l++) {
-				if(Com[j].date[l] == symb[i].c)
-			        count++;
-			}
-		}
-		if(count) {
-		    symb[i].p = (float) (count) / k;
-		    cx++;
-		}
-		else
-		    symb[i].p = 0;
+	    symb[i].c = i;
+	    symb[i].p = 0.0;
 	}
 	
+	char c;
+	int size = 0;
+	while(!feof(f)) {
+		size++;
+		char c = getc(f);
+	    for(int i = 0; i < n_symb; i++) {
+	    	if(c == symb[i].c) {
+	    		symb[i].p ++;
+	    		break;
+	    	}
+		}
+	}
+	fclose(f);
+	int cx = 0;
+	for(int i = 0; i < n_symb; i++) {
+	    if(symb[i].p != 0) {
+	    	cx++;
+	    	symb[i].p = (float) (symb[i].p / size);
+		}
+	}
+
 	InsertSort(symb, n_symb);
-	cout << "\n";
-	
 	Fano(0, cx-1, 0, symb);
+	cout << "\n";
 	
 	cout << "Symbol | Probability |  Length  | Code word\n";
 	cout << "-------|-------------|----------|------------\n";
 	for(int i = 0; i < cx; i++) {
+		printf("%2d |", i);
 		printf("%4c   |", symb[i].c);
 		printf(" %9f   |", symb[i].p);
 		printf("%6d    |", Length[i]);
@@ -398,14 +387,7 @@ void Man::Coding_Fano(int &cx, int n, code *&symb, Man *Com) {
 	
 	cout << "Medium L >= Entropy\n";
 	cout << "Medium L < Entropy + 1\n\n";
-	
-	int flag = 1;
-	do {
-		this->PrintCode(Com, symb, cx);
-		cout << "\nDo you want to coding a next record? 1/0 ";
-		cin >> flag;
-		
-	} while(flag);
+
 }
 
 int m = 0;
@@ -441,87 +423,5 @@ void Fano(int L, int R, int k, code *symb) {
 		}
 		Fano(L, m, k, symb);
 		Fano(m+1, R, k, symb);
-	}
-}
-
-void Man::PrintCode(Man *Com, code *symb, int cx) {
-	int x;
-	cout << "What record interests you? ";
-	cin >> x;
-	system("cls");
-	
-	cout << "Symbol | Probability |  Length  | Code word\n";
-	cout << "-------|-------------|----------|------------\n";
-	for(int i = 0; i < cx; i++) {
-		printf("%4c   |", symb[i].c);
-		printf(" %9f   |", symb[i].p);
-		printf("%6d    |", Length[i]);
-	    for(int j = 0; j <= Length[i]; j++)
-	        cout << C[i][j];
-
-	    cout << "\n";
-	}
-	
-	if((x > 0) && (x <= 4000)) {
-		printf("\n%4d.| ", x);
-		x--;
-		cout << Com[x].name << "| ";
-		printf("%3d", Com[x].num);
-		cout << " | " << Com[x].position << " |   " << Com[x].date << "\n\n";
-		
-		cout << "Name: ";
-		for(int i = 0; i < 30; i++) {
-			for(int j = 0; j < cx; j++) {
-				if(Com[x].name[i] == symb[j].c) {
-					for(int k = 0; k <= Length[j]; k++)
-					    cout << C[j][k];	    
-					cout << " ";
-					break;
-				}
-			}
-		}
-		
-		cout << "\n\nNumber: ";
-		char s[4];
-		itoa(Com[x].num, s, 10);
-		for(int i = 0; s[i] != '\0'; i++) {
-			for(int j = 0; j < cx; j++) {
-				if(s[i] == symb[j].c) {
-					for(int k = 0; k <= Length[j]; k++)
-					    cout << C[j][k];	    
-					cout << " ";
-					break;
-				}
-			}
-		}
-		
-		cout << "\n\nPosition: ";
-		for(int i = 0; i < 22; i++) {
-			for(int j = 0; j < cx; j++) {
-				if(Com[x].position[i] == symb[j].c) {
-					for(int k = 0; k <= Length[j]; k++)
-					    cout << C[j][k];	    
-					cout << " ";
-					break;
-				}
-			}
-		}
-		
-		cout << "\n\nDate: ";
-		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < cx; j++) {
-				if(Com[x].date[i] == symb[j].c) {
-					for(int k = 0; k <= Length[j]; k++)
-					    cout << C[j][k];	    
-					cout << " ";
-					break;
-				}
-			}
-		}
-		cout << "\n";
-	}
-	
-	else {
-		cout << "\nYou entered wrong value. Try again";
 	}
 }
