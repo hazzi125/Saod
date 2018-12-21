@@ -27,10 +27,7 @@ int main() {
 		cout << "\nDo you want to find another person? 1/0 ";
 		cin >> flag;
 	}
-	
-	code *symb = new code[n_symb];
-	int cx = 0;
-	Company->Coding_Fano(cx, N, symb, Company);
+	Company->Coding_Fano();
 	
 	system("pause");
 	return 0;
