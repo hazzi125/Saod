@@ -355,15 +355,19 @@ void Man::Coding_Fano() {
 	    	symb[i].p = (float) (symb[i].p / size);
 		}
 	}
+	
+	Length = new int[cx];
+	for(int i = 0; i < cx; i++) 
+	    Length[i] = 0;
 
 	InsertSort(symb, n_symb);
 	Fano(0, cx-1, 0, symb);
 	cout << "\n";
 	
-	cout << "Symbol | Probability |  Length  | Code word\n";
-	cout << "-------|-------------|----------|------------\n";
+	cout << "Num| Symbol| Probability |  Length  | Code word\n";
+	cout << "---|-------|-------------|----------|------------\n";
 	for(int i = 0; i < cx; i++) {
-		printf("%2d |", i);
+		printf("%2d |", i+1);
 		printf("%4c   |", symb[i].c);
 		printf(" %9f   |", symb[i].p);
 		printf("%6d    |", Length[i]);

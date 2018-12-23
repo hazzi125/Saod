@@ -29,7 +29,7 @@ struct code {
 const int n_symb = 256;
 code symb[n_symb];
 char C[n_symb][n_symb];
-int Length[n_symb];
+int *Length;
 
 class Man {
 private:
